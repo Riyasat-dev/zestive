@@ -151,6 +151,12 @@ window.addEventListener("click", function (e) {
   }
 });
 
+modal.addEventListener("click", function (e) {
+  if (e.target === modal) {
+    closeModal();
+  }
+});
+
 let countersStarted = false;
 
 function startCounters() {
