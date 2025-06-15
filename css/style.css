@@ -357,11 +357,11 @@ section {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0.9);
   justify-content: center;
   align-items: center;
   z-index: 999;
-  flex-direction: column;
+  overflow: hidden;
 }
 
 .modal-content {

@@ -83,26 +83,10 @@ function animateWord(word) {
     const letter = document.createElement("span");
     letter.textContent = word[i];
     letter.className = "letter";
-    letter.style.animationDelay = i * 0.1 + "s"; // ہر حرف تھوڑا دیر سے animate ہوگا
+    letter.style.animationDelay = i * 0.1 + "s";
     span.appendChild(letter);
   }
 }
-
-function changeWord() {
-  animateWord(words[index]);
-  index = (index + 1) % words.length;
-}
-
-changeWord(); // page load پر پہلا word animate ہو جائے
-
-setInterval(() => {
-  // fade out current word by opacity animation پھر نیا animate کریں گے
-  span.style.opacity = "0";
-  setTimeout(() => {
-    changeWord();
-    span.style.opacity = "1";
-  }, 600); // fade out کا time اور animateIn کا شروع کرنے کا delay
-}, 4000);
 
 const imageList = [
   "images/g-1.jpg",
@@ -118,12 +102,14 @@ const imageList = [
 
 let currentIndex = 0;
 
+const modal = document.getElementById("imageModal");
+const modalImg = document.getElementById("modalImage");
+
 function showImageFromIndex(index) {
   currentIndex = index;
-  const modal = document.getElementById("imageModal");
-  const modalImg = document.getElementById("modalImage");
   modalImg.src = imageList[currentIndex];
   modal.style.display = "flex";
+  document.body.style.overflow = "hidden"; // Prevent background scroll
 }
 
 function showImage(el) {
@@ -133,26 +119,25 @@ function showImage(el) {
 }
 
 function closeModal() {
-  document.getElementById("imageModal").style.display = "none";
+  modal.style.display = "none";
+  document.body.style.overflow = ""; // Restore scroll
 }
 
 function changeImage(step) {
-  currentIndex += step;
-  if (currentIndex < 0) currentIndex = imageList.length - 1;
-  if (currentIndex >= imageList.length) currentIndex = 0;
-  document.getElementById("modalImage").src = imageList[currentIndex];
+  currentIndex = (currentIndex + step + imageList.length) % imageList.length;
+  modalImg.src = imageList[currentIndex];
 }
 
-// Close modal on outside click
-window.addEventListener("click", function (e) {
-  const modal = document.getElementById("imageModal");
-  if (e.target === modal) {
+// ✅ Close when clicking outside image
+modal.addEventListener("click", function (e) {
+  if (e.target === modal || e.target.classList.contains("close-btn")) {
     closeModal();
   }
 });
 
-modal.addEventListener("click", function (e) {
-  if (e.target === modal) {
+// ✅ Escape key for close
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
     closeModal();
   }
 });
